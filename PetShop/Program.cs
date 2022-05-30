@@ -8,7 +8,7 @@ namespace PetShop
         static void Main(string[] args)
         {
             ShopSystem shopSystem = new ShopSystem();
-            shopSystem.mainMenu();
+            shopSystem.preMenu();
         }
     }
 }

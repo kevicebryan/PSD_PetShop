@@ -1,0 +1,15 @@
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.csproj.AssemblyReference.cache
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.GeneratedMSBuildEditorConfig.editorconfig
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.AssemblyInfoInputs.cache
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.AssemblyInfo.cs
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.csproj.CoreCompileInputs.cache
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\bin\Debug\net6.0\PetShop.exe
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\bin\Debug\net6.0\PetShop.deps.json
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\bin\Debug\net6.0\PetShop.runtimeconfig.json
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\bin\Debug\net6.0\PetShop.dll
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\bin\Debug\net6.0\PetShop.pdb
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.dll
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\refint\PetShop.dll
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.pdb
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\PetShop.genruntimeconfig.cache
+D:\KevinBryan\Projects\VisualStudio_C#\PetShop\obj\Debug\net6.0\ref\PetShop.dll

@@ -9,29 +9,36 @@ namespace PetShop
     class Dog
     {
         private string id { get; set; }
+        private string name { get; set; }
+        private Date birthDate { get; }
+        private int price { get; set; }
+       
+        // Make new Class for Description
+        private string description { get; set; }
+
         public string Id
         {
             get { return id; }
             set { id = value; }
         }
-        private string name { get; set; }
+
         public string Name
         {
             get { return name; }
             set { name = value; }
         }
-        private Date birthDate { get; }
+
         public Date BirthDate
         {
             get { return birthDate; }
         }
-        private int price { get; set; }
+
         public int  Price
         {
             get { return price; }
             set { price = value; }
         }
-        private string description { get; set; }
+
         public string Description
         {
             get { return description; }

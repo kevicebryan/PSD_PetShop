@@ -30,5 +30,20 @@ namespace PetShop
         {
             return ($"{name} / {phone} / {email}");
         }
+
+        public void viewDogs(List<Dog> dogs)
+        {
+            for (int i = 0; i < dogs.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {dogs[i].printDog()}");
+            }
+        }
+        public void viewItems(List <Item> items)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {items[i].printItem()}");
+            }
+        }
     }
 }

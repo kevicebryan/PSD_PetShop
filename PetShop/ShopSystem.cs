@@ -11,27 +11,74 @@ namespace PetShop
         List <User> users = new List<User>();
         List<Dog> dogs = new List<Dog>();
         List<Item>items = new List<Item>();
-
+        Validation validator = new Validation();
         public ShopSystem()
         {
             // to add dummy Data to the system
             init();
         }
 
-        public void mainMenu()
+        public void preMenu()
+        {
+            int choice = -1;
+            while (choice != 3)
+            {
+                printPreMenu();
+                Console.WriteLine(">>");
+                choice = Convert.ToInt32(Console.ReadLine());
+                if (choice == 1) login();
+                if (choice == 2) register();
+            }
+        }
+
+        public void printPreMenu()
+        {
+            Console.WriteLine("PSD Pet Shop");
+            Console.WriteLine("1. Login");
+            Console.WriteLine("2. Register");
+            Console.WriteLine("3. Exit");
+        }
+
+        public void customerMenu(Customer customer)
+        {
+            int choice = -1;
+            while (choice != 5)
+            {
+                printCustomerMenu();
+                Console.WriteLine(">>");
+                choice = Convert.ToInt32(Console.ReadLine());
+                if (choice == 1) customer.viewDogs(dogs);
+                if (choice == 2) customer.buyDog(dogs);
+                if (choice == 3) customer.viewItems(items);
+                if (choice == 4) customer.buyItem(items);
+            }
+        }
+
+        public void printCustomerMenu()
+        {
+            Console.WriteLine("PSD Pet Shop");
+            Console.WriteLine("1. View Dogs");
+            Console.WriteLine("2. Buy a dog");
+            Console.WriteLine("3. View Items");
+            Console.WriteLine("4. Buy item");
+            Console.WriteLine("5. Exit");
+        }
+
+        public void adminMenu(Admin admin)
         {
             int choice = -1;
             while(choice != 4)
             {
-                printMainMenu();
+                printAdminMenu();
                 Console.WriteLine(">>");
                 choice = Convert.ToInt32(Console.ReadLine());
-                if(choice == 1) manageDogs();
-                if(choice == 2) manageItems();
-                if(choice == 3) manageUsers();
+                if(choice == 1) admin.manageDogs(dogs);
+                if(choice == 2) admin.manageItems(items);
+                if(choice == 3) admin.manageUsers(users);
             }
         }
-        void printMainMenu()
+
+        public void printAdminMenu()
         {
             Console.WriteLine("PSD Pet Shop");
             Console.WriteLine("1. Manage Dogs");
@@ -40,43 +87,89 @@ namespace PetShop
             Console.WriteLine("4. Exit");
         }
 
-        void manageDogs()
+        public void login()
         {
-            Console.WriteLine("Manage Dogs");
-            Console.WriteLine("1. View Dogs");
-            Console.WriteLine("2. Add New Dog");
-            Console.WriteLine("3. Remove Dog");
-            Console.WriteLine("4. Exit");
-            int choice = Convert.ToInt32(Console.ReadLine());
-            if (choice == 1) viewDogs();
-            if (choice == 2) addDog();
-            if (choice == 3) removeDog();
+            string email;  string password;
+
+            do
+            {
+                do
+                {
+                    Console.Write("Your email: ");
+                    email = Console.ReadLine();
+                } while (!validator.ValidEmail(email));
+
+                do
+                {
+                    Console.Write("Password: ");
+                    password = Console.ReadLine();
+                } while (!validator.ValidPassword(password));
+
+                if(validUser(email, password) == null)
+                {
+                    Console.WriteLine("Invalid credentials, please fill data again!");
+                }
+
+            } while (validUser(email, password) == null);
+
+
+            Console.WriteLine("Login Success!");
+            if (email.Equals("admin@admin"))
+            {
+                User currUser = validUser(email, password);
+                Admin currAdmin = new Admin(currUser.Name, currUser.Phone, currUser.Email, currUser.Password);
+                adminMenu(currAdmin);
+            }
+            else{
+                User currUser = validUser(email, password);
+                Customer currCustomer = new Customer(currUser.Name, currUser.Phone, currUser.Email, currUser.Password);
+                customerMenu(currCustomer);
+            };
         }
 
-        void manageUsers()
+        public User validUser(string email, string password)
         {
-            Console.WriteLine("Manage Users");
-            Console.WriteLine("1. View Users");
-            Console.WriteLine("2. Ban User");
-            Console.WriteLine("3. Exit");
-            int choice = Convert.ToInt32(Console.ReadLine());
-            if (choice == 1) viewUsers();
-            if (choice == 2) banUser();
+            for(int i = 0; i < users.Count; i++)
+            {
+                if(users[i].Email.Equals(email))
+                {
+                    if (users[i].Password.Equals(password)) return users[i];
+                }
+            }
+            return null;
         }
 
-        void manageItems()
+        public void register()
         {
-            Console.WriteLine("Manage Items");
-            Console.WriteLine("1. View Items");
-            Console.WriteLine("2. Add New Item");
-            Console.WriteLine("3. Remove Item");
-            Console.WriteLine("4. Exit");
-            int choice = Convert.ToInt32(Console.ReadLine());
-            if (choice == 1) viewItems();
-            if (choice == 2) addItem();
-            if (choice == 3) removeItem();
+            string name; string phone; string email; string password;
+            Console.Write("Your name: ");
+            name = Console.ReadLine();
+            do
+            {
+                Console.Write("Your email: ");
+                email = Console.ReadLine();
+            } while (!validator.ValidEmail(email));
+
+            do
+            {
+                Console.Write("Your phone number: ");
+                phone = Console.ReadLine();
+            } while (!validator.ValidPhone(phone));
+
+            do
+            {
+                Console.Write("Password: ");
+                password = Console.ReadLine();
+            } while (!validator.ValidPassword(password));
+
+            User newUser = new User(name, phone, email, password);
+            users.Add(newUser);
+            Console.WriteLine("Succesfully Registered!");
+            Console.WriteLine("You can now login!");
         }
 
+
+        // ID Generators
         public string generateDogID()
         {
             Random randomNumber = new Random();
@@ -128,148 +221,34 @@ namespace PetShop
             return true;
         }
 
-        // Manage Dogs
 
-        void viewDogs()
-        {
-            for(int i = 0; i < dogs.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {dogs[i].printDog()}");
-            }
-        }
-
-        void addDog()
-        {
-            string id = generateDogID();
-            Console.Write("Input Dog Name: ");
-            string name = Console.ReadLine();
-            Console.Write("Input Price: ");
-            int price = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Input Birth Date [1-31]: ");
-            int day = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Input Birth Month [1-12]: ");
-            int month = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Input Birth Year: ");
-            int year = Convert.ToInt32(Console.ReadLine());
-            Date birthDate = new Date(day, month, year);
-            Console.Write($"Description of {name}: ");
-            string desc = Console.ReadLine();
-
-            Dog newDog = new Dog(id, name, birthDate, price, desc);
-            dogs.Add(newDog);
-            Console.WriteLine($"Succefully added {name}, its ID is {id}");
-        }
-
-        void removeDog()
-        {
-            viewDogs();
-            int idx = -1;
-            while (!!validDogIndex(idx))
-            {
-                Console.WriteLine($"Remove Dog dog at number [1 - {dogs.Count}]:");
-                idx = Convert.ToInt32(Console.ReadLine());
-            }
-            Dog removedDog = dogs.ElementAt(idx - 1);
-            Console.WriteLine($"Succesfully removed #{removedDog.Id}");
-            dogs.RemoveAt(idx - 1);
-
-        }
-        
-        
-        // Manage Items
-        void viewItems()
-        {
-            for (int i = 0; i < items.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {items[i].printItem()}");
-            }
-        }
-
-        void addItem()
-        {
-            string id = generateItemID();
-            Console.Write("Input Item Name: ");
-            string name = Console.ReadLine();
-            Console.Write("Input Price: ");
-            int price = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Input Stock: ");
-            int stock = Convert.ToInt32(Console.ReadLine());
-
-            Item newItem = new Item(id, name, price, stock);
-            items.Add(newItem);
-            Console.WriteLine($"Succefully added {name}, item ID is {id}");
-        }
-
-        void removeItem()
-        {
-            viewItems();
-            int idx = -1;
-            while (!!validItemIndex(idx))
-            {
-                Console.WriteLine($"Remove Dog dog at number [1 - {items.Count}]:");
-                idx = Convert.ToInt32(Console.ReadLine());
-            }
-            Item removedItems = items.ElementAt(idx - 1);
-            Console.WriteLine($"Succesfully removed #{removedItems.Id}");
-            items.RemoveAt(idx - 1);
-
-        }
-        
-        
-        // Manage Users
-        void viewUsers()
-        {
-            for (int i = 0; i < users.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {users[i].printUser()}");
-            }
-        }
-
-        void banUser()
-        {
-            viewUsers();
-            int idx = -1;
-            while (!!validItemIndex(idx))
-            {
-                Console.WriteLine($"Remove Dog dog at number [1 - {items.Count}]:");
-                idx = Convert.ToInt32(Console.ReadLine());
-            }
-            User removedUser = users.ElementAt(idx - 1);
-            Console.WriteLine($"Succesfully removed {removedUser.Email}");
-            users.RemoveAt(idx - 1);
-        }
-
-        Boolean validDogIndex(int choice)
+        // Validating Index
+        public Boolean validDogIndex(int choice)
         {
             choice--;
-
-            if(choice < 0) return false;
-            if (choice > dogs.Count - 1) return false;
+            if (!validator.ValidRange(0, dogs.Count - 1, choice)) return false;
             return true;
         }
-        Boolean validUserIndex(int choice)
+        public Boolean validUserIndex(int choice)
         {
             choice--;
-
-            if (choice < 0) return false;
-            if (choice > users.Count - 1) return false;
+            if (!validator.ValidRange(0, users.Count - 1, choice)) return false;
             return true;
         }
-        Boolean validItemIndex(int choice)
+        public Boolean validItemIndex(int choice)
         {
             choice--;
-
-            if (choice < 0) return false;
-            if (choice > items.Count - 1) return false;
+            if (!validator.ValidRange(0, items.Count - 1, choice)) return false;
             return true;
         }
 
-        void init()
+        public void init()
         {
             // Dummy Users
             users.Add(new User("Kevin", "0812345676", "kevin@gmail.com", "password"));
             users.Add(new User("Ryanto", "0855555644", "ryanto@gmail.com", "password"));
             users.Add(new User("Wendy", "08333456222", "wendy@gmail.com", "password"));
+            users.Add(new User("admin", "081234567890", "admin@admin", "admin123"));
 
             // Dummy Dogs
             dogs.Add(new Dog("D001", "Fury", new Date(1, 1, 2010), 1000000, "a furry black pitbull"));
