@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PetShop
 {
@@ -11,11 +13,14 @@ namespace PetShop
         List <User> users = new List<User>();
         List<Dog> dogs = new List<Dog>();
         List<Item>items = new List<Item>();
+
         Validation validator = new Validation();
         public ShopSystem()
         {
             // to add dummy Data to the system
             init();
+
+
         }
 
         public void preMenu()
@@ -29,6 +34,14 @@ namespace PetShop
                 if (choice == 1) login();
                 if (choice == 2) register();
             }
+            // convert list of obj to JSON
+            string usersJSON = JsonSerializer.Serialize(users);
+            string dogsJSON = JsonSerializer.Serialize(dogs);
+            string itemsJSON = JsonSerializer.Serialize(items);
+
+            File.WriteAllText("users.json", usersJSON);
+            File.WriteAllText("dogs.json", dogsJSON);
+            File.WriteAllText("items.json", itemsJSON);
         }
 
         public void printPreMenu()
@@ -244,6 +257,22 @@ namespace PetShop
 
         public void init()
         {
+            
+            string usersFileName = "users.json";
+            string itemsFileName = "items.json";
+            string dogsFileName = "dogs.json";
+
+
+            string usersJSONString = File.ReadAllText(usersFileName);
+            string itemsJSONString = File.ReadAllText(itemsFileName);
+            string dogsJSONString = File.ReadAllText(dogsFileName);
+
+            users = JsonSerializer.Deserialize<List<User>>(usersJSONString);
+            items = JsonSerializer.Deserialize<List<Item>>(itemsJSONString);
+            dogs = JsonSerializer.Deserialize <List<Dog>>(dogsJSONString);
+
+            /*
+
             // Dummy Users
             users.Add(new User("Kevin", "0812345676", "kevin@gmail.com", "password"));
             users.Add(new User("Ryanto", "0855555644", "ryanto@gmail.com", "password"));
@@ -251,13 +280,18 @@ namespace PetShop
             users.Add(new User("admin", "081234567890", "admin@admin", "admin123"));
 
             // Dummy Dogs
-            dogs.Add(new Dog("D001", "Fury", new Date(1, 1, 2010), 1000000, "a furry black pitbull"));
-            dogs.Add(new Dog("D002", "Stanny", new Date(2, 15, 2019), 1500000, "a tiny chihuahua"));
-            dogs.Add(new Dog("D003", "Billy", new Date(4, 18, 2020), 2500000, "a giant bulldog"));
+            dogs.Add(new Dog("D001", "Fury", new Date(1, 1, 2010), 1000000, new Description("black", "...", 4.5, "Poodle" )));
+            dogs.Add(new Dog("D002", "Stanny", new Date(2, 15, 2019), 1500000, new Description("brown", "...", 2.5, "Labrador")));
+            dogs.Add(new Dog("D003", "Billy", new Date(4, 18, 2020), 2500000, new Description("white", "...", 3.0, "Golden Retriever")));
             //Dummy Items
             items.Add(new Item("I001", "Dog Plushie", 50000, 50));
             items.Add(new Item("I002", "Dog Leash", 75000, 120));
             items.Add(new Item("I003", "Dog Dragon Costume", 125000, 10));
+
+            */
+
+
+
 
         }
     }

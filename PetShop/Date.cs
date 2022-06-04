@@ -10,20 +10,29 @@ namespace PetShop
         //value object untuk tanggal
         //IMMUTABLE
     {
-        public int day;
-        public int month;
-        public int year;
+        private int day { get; }
+        private int month { get; }
+        private int year { get; }
+
+        public int Day { get { return day; } }
+        public int Month { get { return month; } }
+        public int Year { get { return year; } }
+
+        public Date(int day, int month, int year)
+        {
+            this.day = day;
+            this.month = month;
+            this.year = year;  
+        }
+        
 
         public string printDate()
         {
             return ($"{day}/{month}/{year}");
         }
 
-        public Date(int d, int m, int y)
-        {
-            this.day = d;
-            this.month = m;
-            this.year = y;  
-        }
+
+        
+
     }
 }

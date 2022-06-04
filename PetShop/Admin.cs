@@ -109,10 +109,16 @@ namespace PetShop
             Console.Write("Input Birth Year: ");
             int year = Convert.ToInt32(Console.ReadLine());
             Date birthDate = new Date(day, month, year);
-            Console.Write($"Description of {name}: ");
-            string desc = Console.ReadLine();
+            Console.Write($"Color of {name}: ");
+            string color = Console.ReadLine();
+            Console.Write($"Image Source of {name}: ");
+            string photo = Console.ReadLine();
+            Console.Write($"Weight of {name}: ");
+            double weight = Convert.ToDouble(Console.ReadLine());
+            Console.Write($"Species of {name}: ");
+            string species = Console.ReadLine();
 
-            Dog newDog = new Dog(id, name, birthDate, price, desc);
+            Dog newDog = new Dog(id, name, birthDate, price, new Description(color, photo, weight, species));
             dogs.Add(newDog);
             Console.WriteLine($"Succefully added {name}, its ID is {id}");
         }

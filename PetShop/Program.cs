@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PetShop
 {
@@ -9,6 +11,7 @@ namespace PetShop
         {
             ShopSystem shopSystem = new ShopSystem();
             shopSystem.preMenu();
+
         }
     }
 }
