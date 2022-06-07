@@ -10,6 +10,10 @@ namespace PetShop
 {
     class ShopSystem
     {
+        private string USERFILENAME = "users.json";
+        private string ITEMSFILENAME = "items.json";
+        private string DOGSFILENAME = "dogs.json";
+
         List <User> users = new List<User>();
         List<Dog> dogs = new List<Dog>();
         List<Item>items = new List<Item>();
@@ -19,8 +23,6 @@ namespace PetShop
         {
             // to add dummy Data to the system
             init();
-
-
         }
 
         public void preMenu()
@@ -35,13 +37,7 @@ namespace PetShop
                 if (choice == 2) register();
             }
             // convert list of obj to JSON
-            string usersJSON = JsonSerializer.Serialize(users);
-            string dogsJSON = JsonSerializer.Serialize(dogs);
-            string itemsJSON = JsonSerializer.Serialize(items);
-
-            File.WriteAllText("users.json", usersJSON);
-            File.WriteAllText("dogs.json", dogsJSON);
-            File.WriteAllText("items.json", itemsJSON);
+            Repository.writeData(users, dogs, items);
         }
 
         public void printPreMenu()
@@ -257,19 +253,9 @@ namespace PetShop
 
         public void init()
         {
-            
-            string usersFileName = "users.json";
-            string itemsFileName = "items.json";
-            string dogsFileName = "dogs.json";
-
-
-            string usersJSONString = File.ReadAllText(usersFileName);
-            string itemsJSONString = File.ReadAllText(itemsFileName);
-            string dogsJSONString = File.ReadAllText(dogsFileName);
-
-            users = JsonSerializer.Deserialize<List<User>>(usersJSONString);
-            items = JsonSerializer.Deserialize<List<Item>>(itemsJSONString);
-            dogs = JsonSerializer.Deserialize <List<Dog>>(dogsJSONString);
+            users = Repository.readUsers(USERFILENAME);
+            dogs = Repository.readDogs(DOGSFILENAME);
+            items = Repository.readItems(ITEMSFILENAME);
 
             /*
 
