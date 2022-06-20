@@ -161,5 +161,20 @@ namespace PetShop
             users.RemoveAt(idx - 1);
         }
 
+        // View Events [Purchases]
+        public void viewPurchaseEvents(List<PurchaseEvent> purchases)
+        {
+            Console.WriteLine("Purchases Events");
+            Console.WriteLine("===========================================");
+            if (purchases.Count == 0)
+            {
+                Console.WriteLine("EMPTY");
+            }
+            for (int i = 0; i < purchases.Count; i++)
+            {
+                Console.WriteLine(purchases[i].displayPurchaseEvent());
+            }
+            Console.WriteLine("===========================================");
+        }
     }
 }

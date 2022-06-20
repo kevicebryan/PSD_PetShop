@@ -40,5 +40,19 @@ namespace PetShop
             File.WriteAllText("dogs.json", dogsJSON);
             File.WriteAllText("items.json", itemsJSON);
         }
+
+        // for logs (PurchaseEvents)
+        public static List<PurchaseEvent> readPurchases(String fileName)
+        {
+            string jsonString = File.ReadAllText(fileName);
+            List<PurchaseEvent> list = JsonSerializer.Deserialize<List<PurchaseEvent>>(jsonString);
+            return list;
+        }
+
+        public static void writePurchaseEvent(List<PurchaseEvent> purchases) { 
+            string purchaseEventJSON = JsonSerializer.Serialize(purchases);
+            File.WriteAllText("purchaseEvents.json", purchaseEventJSON);
+        }
+
     }
 }

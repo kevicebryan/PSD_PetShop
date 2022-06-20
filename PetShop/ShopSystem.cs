@@ -14,9 +14,13 @@ namespace PetShop
         private string ITEMSFILENAME = "items.json";
         private string DOGSFILENAME = "dogs.json";
 
-        List <User> users = new List<User>();
-        List<Dog> dogs = new List<Dog>();
-        List<Item>items = new List<Item>();
+        private string PURCHASELOGSFILENAME = "purchaseEvents.json";
+
+        static List <User> users = new List<User>();
+        static List<Dog> dogs = new List<Dog>();
+        static List<Item>items = new List<Item>();
+
+        static List<PurchaseEvent> purchases = new List<PurchaseEvent>();
 
         Validation validator = new Validation();
         public ShopSystem()
@@ -32,7 +36,7 @@ namespace PetShop
             {
                 printPreMenu();
                 Console.WriteLine(">>");
-                choice = Convert.ToInt32(Console.ReadLine());
+                choice = Convert.ToInt32(Console.ReadLine()); 
                 if (choice == 1) login();
                 if (choice == 2) register();
             }
@@ -42,12 +46,14 @@ namespace PetShop
 
         public void printPreMenu()
         {
-            Console.WriteLine("PSD Pet Shop");
+            Console.WriteLine("\nPSD Pet Shop");
+            Console.WriteLine("============================");
             Console.WriteLine("1. Login");
             Console.WriteLine("2. Register");
             Console.WriteLine("3. Exit");
         }
 
+        // Customer Menu
         public void customerMenu(Customer customer)
         {
             int choice = -1;
@@ -55,17 +61,36 @@ namespace PetShop
             {
                 printCustomerMenu();
                 Console.WriteLine(">>");
-                choice = Convert.ToInt32(Console.ReadLine());
+                choice = Convert.ToInt32(Console.ReadLine()); 
                 if (choice == 1) customer.viewDogs(dogs);
-                if (choice == 2) customer.buyDog(dogs);
+                if (choice == 2) { 
+                    PurchaseEvent purchaseEvent =  customer.buyDog(dogs); 
+                    if(purchaseEvent!= null)
+                    {
+                        purchases.Add(purchaseEvent);
+                        purchaseEvent.displayPurchaseEvent();
+                        Repository.writePurchaseEvent(purchases);
+                    }
+                }
+                
                 if (choice == 3) customer.viewItems(items);
-                if (choice == 4) customer.buyItem(items);
+                if (choice == 4) {
+                    PurchaseEvent purchaseEvent = customer.buyItem(items);
+                    if (purchaseEvent != null)
+                    {
+                        purchases.Add(purchaseEvent);
+                        purchaseEvent.displayPurchaseEvent();
+                        Repository.writePurchaseEvent(purchases);
+                    }
+                }
+                
             }
         }
 
         public void printCustomerMenu()
         {
-            Console.WriteLine("PSD Pet Shop");
+            Console.WriteLine("\nPSD Pet Shop");
+            Console.WriteLine("============================");
             Console.WriteLine("1. View Dogs");
             Console.WriteLine("2. Buy a dog");
             Console.WriteLine("3. View Items");
@@ -73,27 +98,32 @@ namespace PetShop
             Console.WriteLine("5. Exit");
         }
 
+
+        // Admin Menu
         public void adminMenu(Admin admin)
         {
             int choice = -1;
-            while(choice != 4)
+            while(choice != 5)
             {
                 printAdminMenu();
                 Console.WriteLine(">>");
-                choice = Convert.ToInt32(Console.ReadLine());
-                if(choice == 1) admin.manageDogs(dogs);
-                if(choice == 2) admin.manageItems(items);
-                if(choice == 3) admin.manageUsers(users);
+                choice = Convert.ToInt32(Console.ReadLine()); 
+                if (choice == 1) admin.manageDogs(dogs);
+                if (choice == 2) admin.manageItems(items);
+                if (choice == 3) admin.manageUsers(users);
+                if (choice == 4) admin.viewPurchaseEvents(purchases);
             }
         }
 
         public void printAdminMenu()
         {
-            Console.WriteLine("PSD Pet Shop");
+            Console.WriteLine("\nPSD Pet Shop");
+            Console.WriteLine("============================");
             Console.WriteLine("1. Manage Dogs");
             Console.WriteLine("2. Manage Items");
             Console.WriteLine("3. Manage Users");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("4. View Purchase Logs");
+            Console.WriteLine("5. Exit");
         }
 
         public void login()
@@ -230,6 +260,12 @@ namespace PetShop
             return true;
         }
 
+        public static int getEventId()
+        {
+            if(purchases.Count > 0) return purchases[purchases.Count - 1].getID() + 1;
+
+            return 1;
+        }
 
         // Validating Index
         public Boolean validDogIndex(int choice)
@@ -251,11 +287,14 @@ namespace PetShop
             return true;
         }
 
+
         public void init()
         {
             users = Repository.readUsers(USERFILENAME);
             dogs = Repository.readDogs(DOGSFILENAME);
             items = Repository.readItems(ITEMSFILENAME);
+
+            // purchases = Repository.readPurchases(PURCHASELOGSFILENAME);
 
             /*
 

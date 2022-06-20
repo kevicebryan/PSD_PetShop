@@ -13,38 +13,42 @@ namespace PetShop
         {
         }
 
-        public void buyDog(List <Dog> dogs)
+        public PurchaseEvent buyDog(List <Dog> dogs)
         {
             base.viewDogs(dogs);
             int idx = -1;
             while (!ss.validDogIndex(idx))
             {
                 Console.WriteLine($"Buy Dog dog at number [1 - {dogs.Count}]:");
-                idx = Convert.ToInt32(Console.ReadLine());
+                idx = Convert.ToInt32(Console.ReadLine()); 
             }
             Dog removedDog = dogs.ElementAt(idx - 1);
             Console.WriteLine($"Succesfully bought #{removedDog.Id}");
             dogs.RemoveAt(idx - 1);
 
+            return new PurchaseEvent(ShopSystem.getEventId(), this.Email, removedDog.Id);
+
         }
-        public void buyItem(List <Item> items)
+        public PurchaseEvent buyItem(List <Item> items)
         {
             base.viewItems(items);
             int idx = -1;
-            while (ss.validItemIndex(idx))
+            while (!ss.validItemIndex(idx))
             {
                 Console.WriteLine($"Buy Item number [1 - {items.Count}]:");
-                idx = Convert.ToInt32(Console.ReadLine());
+                idx = Convert.ToInt32(Console.ReadLine()); 
             }
             Item removedItems = items.ElementAt(idx - 1);
             if (removedItems.Stock != 0)
             {
                 Console.WriteLine($"Succesfully bought #{removedItems.Id}");
                 items.RemoveAt(idx - 1);
+                return new PurchaseEvent(ShopSystem.getEventId(), this.Email, removedItems.Id);
             }
             else
             {
                 Console.WriteLine("Item out of stock!");
+                return null;
             }
         }
     }
